@@ -145,7 +145,7 @@ contract CeloBlogger {
             posts[_index].likes--;
         }
     }
-    function cancelProposal(uint256 _index) public isPostOwner(posts[_index].owner) {
+    function deletePost(uint256 _index) public isPostOwner(posts[_index].owner) {
         delete posts[_index];
     }
 
