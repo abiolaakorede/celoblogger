@@ -46,7 +46,6 @@ function App() {
     if (window.celo) {
       try {
         await window.celo.enable();
-        // notificationOff()
         const web3 = new Web3(window.celo);
         let kit = newKitFromWeb3(web3);
 
@@ -85,9 +84,10 @@ function App() {
   const createPost = async ({ title, image, author, content }) => {
     try {
       await contract.methods.createPost(author, image, title, content).send({ from: address });
-      getPosts()
     } catch (error) {
       console.log(error)
+    } finally{
+      getPosts()
     }
   }
 

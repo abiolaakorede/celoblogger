@@ -45,6 +45,12 @@ contract CeloBlogger {
     mapping(uint256 => mapping(address => bool)) private liked;
 
 
+    // To prevent unauthorized persons
+    modifier isPostOwner(address _address) {
+        require(msg.sender == _address, "NOT_THE_OWNER");
+        _;
+    }
+
     /**
         * @dev allow users to create a post
         * @notice input data needs to contain only valid/non-empty values
@@ -113,6 +119,18 @@ contract CeloBlogger {
         currentPost.tippers++;
     }
 
+    // Edit Post
+    function editPost(
+        uint256 _index,
+        string memory _title,
+        string memory _content,
+        string memory _image
+    ) public isPostOwner(posts[_index].owner) {
+        posts[_index].title = _title;
+        posts[_index].content = _content;
+        posts[_index].image = _image;
+    }
+
     /**
         * @dev allow users to like or dislike a post
         * @notice the default state changes will be liking the post. However, users can call the function again to dislike
@@ -126,6 +144,9 @@ contract CeloBlogger {
             liked[_index][msg.sender] = false;
             posts[_index].likes--;
         }
+    }
+    function deletePost(uint256 _index) public isPostOwner(posts[_index].owner) {
+        delete posts[_index];
     }
 
     function getPostCount() public view returns (uint256) {
